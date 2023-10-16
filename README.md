@@ -63,21 +63,28 @@ try {
 }
 
 ```
-It's suggested to initialize the translator in the `MainActivity` as it would then be accessible from everywhere in the app.
+It's suggested to initialize the translator in the `Application` as it would then be accessible from everywhere in the app.
+
+### Retrieve the state of the TranslatorService
+
+To allow the correct use of the service, it's exposed a `StateFlow<TranslatorState>` that denotes the current state of the service.
+You should check the state of the service before doing any operation.
+</br>Look up the in-code documentation for further info.
 
 ### Automatic Locale detection
 
-The library is capable of automatically detect the device locale and adapt consequently its behavior.
-To enable this feature, simply set the value `localeDetectionActive` to `true` in the `TranslatorConfiguration`.
-``` kotlin
-Translator.init(
-    TranslatorConfiguration(
-        apiKey = "your API Key",
-        primaryLanguage = "your primary language tag",
-        localeDetectionActive = true
-    )
-)
-```
+The library is capable of automatically detect the device locale and adapt consequently its behavior. This feature is enabled by default.
+
+> **_NOTE:_** To disable this feature, simply set the value `localeDetectionActive` to `false` in the `TranslatorConfiguration`.
+>``` kotlin
+>Translator.init(
+>    TranslatorConfiguration(
+>        apiKey = "your API Key",
+>        primaryLanguage = "your primary language tag",
+>        localeDetectionActive = false
+>    )
+>)
+>```
 
 ### Retrieve the TranslatorService instance
 
@@ -112,7 +119,7 @@ val string1 = translator.translate("test.substring1", "ipsum", "consectetur")
 val string2 = translator.translate("test.substring2", "ipsum", "consectetur")
 // string2 = "Lorem consectetur dolor sit amet, ipsum adipiscing elit."
 ```
-> **_WARNING:_** This method might throw exceptions. Check the in-code documentation for further information.
+> **_WARNING:_** If the key is not found in the dataset, the returned string is the key itself.
 
 ### Change language
 
@@ -121,7 +128,6 @@ If you want to programmatically change change the language of the translations, 
 ``` kotlin
 translator.setLanguage(languageCode = "en-US")
 ```
-> **_WARNING:_** This method might throw exceptions. Check the in-code documentation for further information.
 
 > **_NOTE:_** If the `setLanguage` function is successful, the automatic locale detection will be disabled.
 
